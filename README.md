@@ -6,7 +6,9 @@ A MySQL database helper class for Javascript. My aim was to reduce the number of
 
 ## Conventions
 The PK of the table is usually 'id', but you can have anything
+
 The name of the JS object is usually the name of the first MySQL table. This makes coding easier because you're calling it by the same name
+
 The order of operations is: construct, join, load, union, squash, get/set, save
 
 ## Examples
@@ -48,7 +50,9 @@ console.log(calendar); //will output a table of the data
 Creates a new instance of the dataset. You can have as many as client memory allows :)
 #### Parameters
 `table`: This is the name of the MySQL table to query
+
 `pk`: This is the name of the primary key. If you omit this, there will be another database call to get the PK. Having the name of the PK already in here will make it faster
+
 `info`: Purely for debugging. Useful to have the name of the file where you are calling from and also the line number
 #### Example
 ````
@@ -64,12 +68,16 @@ console.log(table.getPK);
 ```
 
 ### `.join`
-Joins another table to the dataset	
+Joins another table to the dataset
+
 This will take the existing table (artwork) and add the user table to the dataset. The join will be on user.id = artwork.created_by
 #### Parameters:
 `table`: The name of the new table to join
+
 `left`: Join condition 1 (the table you're joining)
+
 `right`: Join condition 2 (the original table)
+
 `type`: The join type e.g. inner, left, right, etc. Defaults to 'inner'
 #### Example
 ```
@@ -79,16 +87,25 @@ artwork.join('user', 'id', 'created_by', 'inner');
 
 ### `.load`
 Loads data from the database via SELECT query
+
 Data is stored in the ORM object, use .get() to do stuff with the data
+
 If using curdate(), curtime() or now() then put that in the sql and NOT the params (clientip() and serverip() can go in the params)
 #### Parameters:
 `where`: Where clause, including placeholders (this is the only required parameter)
+
 `params`: Data to replace ? placeholders
+
 `columns`: The columns to return for SELECT. Defaults to *
+
 `sort`: Columns to sort (order) by
+
 `group`: GROUP BY these columns
+
 `limit`: LIMIT to this number of rows
+
 `tableIndex`: orm.table is an array, this selects which one. Defaults to 0. Used with .union()
+
 `async`: Synchronous or asynchronous ajax call. Sometimes the program will run before the data has come back from server
 #### Example
 ```
@@ -100,8 +117,11 @@ customer.load('customercode', $('#custcode').val(), 'emailinvoice'); //SELECT em
 Similar to `.load`, union adds more data from another table (dont confuse with `.join`)
 #### Parameters
 `table`: Table name to union
+
 `where`: Where clause, including placeholders
+
 `params`: Data to replace ? placeholders
+
 `columns`: Optional columns to return for SELECT. Defaults to *
 	
 ### `.squash`
@@ -136,10 +156,13 @@ status.forEach((element) => { //single column
 
 ### `.set`
 Sets a value in the 2D array
+
 You can also use special values like: now(), curdate(), curtime(), clientip(), serverip()
 #### Parameters
 `colName`: Column label
+
 `value`: The value to set
+
 `rowIndex`: Row number. Defaults to 0
 #### Examples
 `invoiceline.set('updated', 1);`
@@ -148,7 +171,9 @@ You can also use special values like: now(), curdate(), curtime(), clientip(), s
 
 ### `.save`
 Saves data to database (update or insert query)
+
 For UPDATE, use `.load()` first then `.set()` then `.save()`
+
 For INSERT, use `.set()` first then `.save()` without `.load()`ing any data
 #### Examples
 Update existing
@@ -169,13 +194,16 @@ branchxfer_full.save(); //will insert new, pk does not exist
 Deletes rows in a table
 #### Parameters
 `where`: Where clause, including placeholders
+
 `params`: Data to replace ? placeholders
 
 ### `.rawSQL`
 Runs raw SQL queries. Is my ORM not good enough for ya?
 #### Parameters
 `sql`: SQL string, including placeholders (?)
+
 `params`: Replace ? with these parameters in the SQL string
+
 `async`: Whether the request is synchronous or asynchronous
 
 ### `.numRows`
